@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from player_dict import player_id_dict_by_team
 
+
 def get_player_shot_log(player_id):
     #NBA Stats API using selected player ID
     url = 'http://stats.nba.com/stats/playerdashptshotlog?'+ \
@@ -22,6 +23,7 @@ def get_player_shot_log(player_id):
     df = pd.DataFrame(shot_data,columns=headers)
     return(df)
 
+
 def get_all_shot_logs():
     all_shot_logs = []
     for team_dict in player_id_dict_by_team.values():
@@ -34,4 +36,6 @@ def get_all_shot_logs():
     return(all_shot_logs)
 
 
-all_shot_logs=pd.concat(get_all_shot_logs())
+if __name__ == "__main__":
+    all_shot_logs=pd.concat(get_all_shot_logs())
+    all_shot_logs.to_csv('shot_logs.csv')
