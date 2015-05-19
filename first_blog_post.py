@@ -1,5 +1,6 @@
-import requests
 import json
+import os
+import requests
 import pandas as pd
 from player_dict import player_id_dict_by_team
 
@@ -37,5 +38,13 @@ def get_all_shot_logs():
 
 
 if __name__ == "__main__":
-    all_shot_logs=pd.concat(get_all_shot_logs())
-    all_shot_logs.to_csv('shot_logs.csv')
+    if "shot_logs.csv" in os.listdir('data'): #if data stored from previous run
+        all_shot_logs = pd.read_csv('data/shot_logs.csv')
+    else:
+        all_shot_logs=pd.concat(get_all_shot_logs())
+        all_shot_logs.to_csv('shot_logs.csv')
+
+player_in_game_grouping = all_shot_logs.groupby(['GAME_ID', 'player_id'])
+fgm_cum     = player_in_game_grouping.FGM.cumsum()
+fga_cum     = player_in_game_grouping.cumcount()
+
